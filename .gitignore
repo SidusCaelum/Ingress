@@ -1,0 +1,22 @@
+# Binaries for programs and plugins
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# Test binary, build with `go test -c`
+*.test
+
+# Output of the go coverage tool, specifically when used with LiteIDE
+*.out
+
+# Tools for go development - VSCode
+pkg/windows_amd64/github.com/derekparker
+pkg/windows_amd64/github.com/golang
+pkg/windows_amd64/github.com/MichaelTJones
+pkg/windows_amd64/github.com/rogpeppe
+pkg/windows_amd64/github.com/sqs
+pkg/windows_amd64/github.com/uudashr
+pkg/windows_amd64/github.com/golang
+pkg/windows_amd64/golang.org/x/tools/*
