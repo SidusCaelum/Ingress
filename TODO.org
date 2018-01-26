@@ -1,0 +1,3 @@
+* First Steps
+** Packaging
+*** TODO Package dependiences better for easy development

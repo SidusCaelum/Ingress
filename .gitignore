@@ -20,3 +20,7 @@ pkg/windows_amd64/github.com/sqs
 pkg/windows_amd64/github.com/uudashr
 pkg/windows_amd64/github.com/golang
 pkg/windows_amd64/golang.org/x/tools/*
+pkg/windows_amd64/github.com/gin*
+pkg/windows_amd64/github.com/mattn
+pkg/windows_amd64/github.com/ugorji
+pkg/windows_amd64/gopkg.in
