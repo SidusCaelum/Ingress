@@ -4,6 +4,7 @@
 *.dll
 *.so
 *.dylib
+*.a
 
 # Test binary, build with `go test -c`
 *.test
@@ -12,15 +13,5 @@
 *.out
 
 # Tools for go development - VSCode
-pkg/windows_amd64/github.com/derekparker
-pkg/windows_amd64/github.com/golang
-pkg/windows_amd64/github.com/MichaelTJones
-pkg/windows_amd64/github.com/rogpeppe
-pkg/windows_amd64/github.com/sqs
-pkg/windows_amd64/github.com/uudashr
-pkg/windows_amd64/github.com/golang
-pkg/windows_amd64/golang.org/x/tools/*
-pkg/windows_amd64/github.com/gin*
-pkg/windows_amd64/github.com/mattn
-pkg/windows_amd64/github.com/ugorji
-pkg/windows_amd64/gopkg.in
+/pkg/*
+/bin/*
