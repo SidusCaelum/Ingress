@@ -15,3 +15,6 @@
 # Tools for go development - VSCode
 /pkg/*
 /bin/*
+/src/github.com/*
+/src/golang.org/*
+/src/gopkg.in/*
