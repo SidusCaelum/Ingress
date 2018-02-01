@@ -20,4 +20,9 @@ var routes = Routes{
 		Path:    "/",
 		Handler: test,
 	},
+	Route{
+		Method:  "POST",
+		Path:    "/NewWarehouse",
+		Handler: NewWarehouse,
+	},
 }

@@ -1,6 +1,8 @@
 package rest
 
 import (
+	"log"
+
 	"github.com/gin-gonic/gin"
 )
 
@@ -15,6 +17,10 @@ func NewRouter() *gin.Engine {
 		switch route.Method {
 		case "GET":
 			router.GET(route.Path, route.Handler)
+		case "POST":
+			router.POST(route.Path, route.Handler)
+		default:
+			log.Printf("%s - method not recognized", route.Path)
 		}
 	}
 

@@ -1,8 +1,0 @@
-* First Steps
-** Packaging
-*** TODO Package dependiences better for easy development
-
-**  Handlers 
-*** build out inital Handlers
-**** inital config of a new warehouse set up
-***** 

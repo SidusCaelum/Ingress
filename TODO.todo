@@ -1,0 +1,9 @@
+INGRESS:
+    Web API:
+        Handlers:
+            ☐ Intial warehouse setup
+            ☐ Connect to particular warehouse
+            ☐ add new item with detials
+            ☐ print label for item (qr code)
+            ☐ edit item(s)
+            ☐ delete item(s)
