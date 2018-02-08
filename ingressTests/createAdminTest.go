@@ -7,6 +7,11 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// TestValidNewUser - check if new user can be made
 func TestValidNewUser(t *testing.T) {
-	u, _ := rest.NewAdminUser(c * gin.Context)
+	r := gin.Default()
+	r.POST("/NewAdminUser", rest.NewAdminUser)
+
+	w := PerformRequest(r, "POST", "/NewAdminUser", nil)
+
 }
