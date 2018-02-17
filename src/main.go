@@ -1,11 +1,11 @@
 package main
 
 import (
+	"Ingress/src/rest"
 	"encoding/json"
 	"fmt"
 	"log"
 	"os"
-	"rest"
 )
 
 // StartupConfiguration - where config data is read into for startup

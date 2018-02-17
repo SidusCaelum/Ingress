@@ -1,6 +1,8 @@
 INGRESS:
     File Structure:
-        ☐ Fix your fucking file structure and GPATH idiot
+        ✔ Fix your fucking file structure and GPATH idiot @done (2/15/2018, 10:55:07 PM)
+    Router:
+        ☐ Build router setup
     Web API:
         Handlers:
             ☐ Intial warehouse setup
