@@ -16,11 +16,6 @@ type Routes []Route
 
 var routes = Routes{
 	Route{
-		Method:  "GET",
-		Path:    "/",
-		Handler: test,
-	},
-	Route{
 		Method:  "POST",
 		Path:    "/NewUser",
 		Handler: NewUser,

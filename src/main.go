@@ -28,6 +28,7 @@ func main() {
 
 	fmt.Printf("Listenting on port: %d\n", config.Port)
 
-	r := rest.NewRouter()
+	//HACK: passing parameter to clarify if testing or not
+	r := rest.NewRouter(false)
 	r.Run()
 }

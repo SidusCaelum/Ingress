@@ -9,9 +9,17 @@ import (
 var router *gin.Engine
 
 // NewRouter - create new router for server. Adds all routes
-func NewRouter() *gin.Engine {
+func NewRouter(testing bool) *gin.Engine {
+	//HACK: add bool to check if testing
 	router := gin.Default()
-	router.LoadHTMLGlob("templates/*")
+	var templatePath string
+
+	if testing {
+		templatePath = "../templates/*"
+	} else {
+		templatePath = "templates/*"
+	}
+	router.LoadHTMLGlob(templatePath)
 
 	for _, route := range routes {
 		switch route.Method {
