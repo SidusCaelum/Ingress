@@ -11,7 +11,7 @@ var router *gin.Engine
 // NewRouter - create new router for server. Adds all routes
 func NewRouter() *gin.Engine {
 	router := gin.Default()
-	router.LoadHTMLGlob("../templates/*")
+	router.LoadHTMLGlob("templates/*")
 
 	for _, route := range routes {
 		switch route.Method {
