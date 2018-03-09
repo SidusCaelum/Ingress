@@ -6,7 +6,6 @@ import (
 	"net/http"
 	"reflect"
 	"regexp"
-	"fmt"
 
 	"github.com/gin-gonic/gin"
 )
@@ -15,7 +14,6 @@ import (
 func NewUser(c *gin.Context) {
 	newUser := new(User)
 	c.BindJSON(newUser)
-	fmt.Printf("%+v\n", newUser)
 
 	status, userCheck := checkNewUserRequest(newUser)
 
@@ -52,13 +50,10 @@ func checkNewUserRequest(newUser *User) (bool, *UserCheck) {
 		Email:    checkEmail(newUser.Email),
 	}
 
-	fmt.Printf("%+v\n", userCheck)
-
 	val := reflect.ValueOf(userCheck).Elem()
 
 	for i := 0; i < val.NumField(); i++ {
 		valueField := val.Field(i)
-		fmt.Printf("ValueField: %t", valueField.Interface())
 
 		if valueField.Interface() == false {
 			//if one element of UserCheck is false status is false return

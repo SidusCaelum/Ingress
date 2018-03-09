@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"testing"
+	"fmt"
 
 	"github.com/stretchr/testify/assert"
 )
@@ -42,7 +43,7 @@ func TestValidNewUserEmailUsername(t *testing.T) {
 	decoder := json.NewDecoder(w.Body)
 	err = decoder.Decode(&actualResponse)
 	if err != nil {
-		t.Errorf("Error when decoding response from NewUser endpoint")
+		t.Errorf(err.Error())
 	}
 
 	assert.Equal(t, http.StatusCreated, w.Code)
