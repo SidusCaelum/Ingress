@@ -32,8 +32,13 @@ func TestValidNewUserEmailUsername(t *testing.T) {
 
 	w := performRequest(r, "POST", "/NewUser", jsonUser)
 
-	expectedResponse := &Response{Message: "User created"}
-	var actualResponse = new(Response)
+	expectedResponse := &UserCheck{
+        Empty: true,
+        Username: true,
+        Email: true,
+    }
+
+	var actualResponse = new(UserCheck)
 	decoder := json.NewDecoder(w.Body)
 	err = decoder.Decode(&actualResponse)
 	if err != nil {
@@ -41,7 +46,9 @@ func TestValidNewUserEmailUsername(t *testing.T) {
 	}
 
 	assert.Equal(t, http.StatusCreated, w.Code)
-	assert.Equal(t, expectedResponse.Message, actualResponse.Message)
+	assert.Equal(t, expectedResponse.Empty, actualResponse.Empty)
+	assert.Equal(t, expectedResponse.Username, actualResponse.Username)
+	assert.Equal(t, expectedResponse.Email, actualResponse.Email)
 }
 
 // TestNonValidNewUserEmailUsername - check if system handles incorrect submission

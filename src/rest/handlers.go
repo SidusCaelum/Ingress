@@ -5,6 +5,8 @@ import (
 	"log"
 	"net/http"
 	"reflect"
+	"regexp"
+	"fmt"
 
 	"github.com/gin-gonic/gin"
 )
@@ -13,22 +15,22 @@ import (
 func NewUser(c *gin.Context) {
 	newUser := new(User)
 	c.BindJSON(newUser)
+	fmt.Printf("%+v\n", newUser)
+
 	status, userCheck := checkNewUserRequest(newUser)
 
-	if status {
-		c.JSON(http.StatusCreated, gin.H{
-			"message": "User created",
-		})
-	} else {
-		json, err := json.Marshal(userCheck)
-		if err != nil {
-			test := err.Error()
-			log.Println(test)
-		}
-
-		// Send back UserCheck - will be process client side.
-		c.JSON(http.StatusConflict, json)
+	json, err := json.Marshal(userCheck)
+	if err != nil {
+		log.Println(err.Error())
 	}
+
+	if status {
+		c.JSON(http.StatusCreated, json)
+		return
+	}
+
+	// Send back UserCheck - will be process client side.
+	c.JSON(http.StatusConflict, json)
 }
 
 // NewWarehouse - initalize new warehouse
@@ -45,13 +47,20 @@ func NewWarehouse(c *gin.Context) {
 func checkNewUserRequest(newUser *User) (bool, *UserCheck) {
 	status := true
 	userCheck := &UserCheck{
-		Empty: checkIfEmptyRequest(newUser),
+		Empty:    checkIfEmptyRequest(newUser),
+		Username: checkUsername(newUser.Username),
+		Email:    checkEmail(newUser.Email),
 	}
 
-	v := reflect.ValueOf(userCheck).Elem()
+	fmt.Printf("%+v\n", userCheck)
 
-	for i := 0; i < v.NumField(); i++ {
-		if v.Field(i).Interface() == false {
+	val := reflect.ValueOf(userCheck).Elem()
+
+	for i := 0; i < val.NumField(); i++ {
+		valueField := val.Field(i)
+		fmt.Printf("ValueField: %t", valueField.Interface())
+
+		if valueField.Interface() == false {
 			//if one element of UserCheck is false status is false return
 			status = false
 			break
@@ -68,4 +77,14 @@ func checkIfEmptyRequest(user *User) bool {
 
 	log.Println("Requested User is empty")
 	return false
+}
+
+func checkUsername(userName string) bool {
+	r, _ := regexp.Compile(`^[a-z0-9_-]{3,16}$`)
+	return r.MatchString(userName)
+}
+
+func checkEmail(password string) bool {
+	r, _ := regexp.Compile(`^([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})$`)
+	return r.MatchString(password)
 }
