@@ -8,7 +8,7 @@ type User struct {
 
 // UserCheck - struct for checking user submission content
 type UserCheck struct {
-	Empty    bool `json:"Empty"`
-	Username bool `json:"Username"`
-	Email    bool `json:"Email"`
+	IsEmpty    bool `json:"Empty"`
+	BadUsername bool `json:"Username"`
+	BadEmail    bool `json:"Email"`
 }

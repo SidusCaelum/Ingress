@@ -1,10 +1,10 @@
 package rest
 
 import (
-	"log"
 	"net/http"
 	"reflect"
 	"regexp"
+	"strings"
 
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
@@ -13,11 +13,12 @@ import (
 // NewUser - create a new user admin user
 func NewUser(c *gin.Context) {
 	newUser := &User{}
-	if err := c.BindWith(newUser, binding.JSON); err != nil {
+
+	if err := c.ShouldBindWith(newUser, binding.JSON); err != nil {
 		c.JSON(http.StatusBadRequest, &UserCheck{
-			Empty: false,
-			Username: false,
-			Email: false,
+			IsEmpty:     true,
+			BadUsername: false,
+			BadEmail:    false,
 		})
 
 		return
@@ -49,9 +50,9 @@ func NewWarehouse(c *gin.Context) {
 func checkNewUserRequest(newUser *User) (bool, *UserCheck) {
 	status := true
 	userCheck := &UserCheck{
-		Empty:    checkIfEmptyRequest(newUser),
-		Username: checkUsername(newUser.Username),
-		Email:    checkEmail(newUser.Email),
+		IsEmpty:     checkIfEmptyRequest(newUser),
+		BadUsername: checkUsername(newUser.Username),
+		BadEmail:    checkEmail(newUser.Email),
 	}
 
 	val := reflect.ValueOf(userCheck).Elem()
@@ -59,7 +60,7 @@ func checkNewUserRequest(newUser *User) (bool, *UserCheck) {
 	for i := 0; i < val.NumField(); i++ {
 		valueField := val.Field(i)
 
-		if valueField.Interface() == false {
+		if valueField.Interface() == true {
 			//if one element of UserCheck is false status is false return
 			status = false
 			break
@@ -70,20 +71,19 @@ func checkNewUserRequest(newUser *User) (bool, *UserCheck) {
 }
 
 func checkIfEmptyRequest(user *User) bool {
-	if user.Email != "" || user.Username != "" {
+	if len(strings.TrimSpace(user.Email)) == 0 || len(strings.TrimSpace(user.Username)) == 0 {
 		return true
 	}
 
-	log.Println("Requested User is empty")
 	return false
 }
 
 func checkUsername(userName string) bool {
 	r, _ := regexp.Compile(`^[a-z0-9_-]{3,16}$`)
-	return r.MatchString(userName)
+	return !(r.MatchString(userName))
 }
 
 func checkEmail(password string) bool {
-	r, _ := regexp.Compile(`^([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})$`)
-	return r.MatchString(password)
+	r, _ := regexp.Compile(`^(("[\w-\s]+")|([\w-]+(?:\.[\w-]+)*)|("[\w-\s]+")([\w-]+(?:\.[\w-]+)*))(@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$)|(@\[?((25[0-5]\.|2[0-4][0-9]\.|1[0-9]{2}\.|[0-9]{1,2}\.))((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\.){2}(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\]?$)`)
+	return !(r.MatchString(password))
 }
