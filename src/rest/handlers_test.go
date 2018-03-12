@@ -6,14 +6,9 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"testing"
-	"fmt"
 
 	"github.com/stretchr/testify/assert"
 )
-
-type Response struct {
-	Message string `json:"Message" binding:"required"`
-}
 
 func performRequest(r http.Handler, method, path string, jsonUser []byte) *httptest.ResponseRecorder {
 	req, _ := http.NewRequest(method, path, bytes.NewReader(jsonUser))
@@ -39,11 +34,11 @@ func TestValidNewUserEmailUsername(t *testing.T) {
         Email: true,
     }
 
-	var actualResponse = new(UserCheck)
-	decoder := json.NewDecoder(w.Body)
-	err = decoder.Decode(&actualResponse)
-	if err != nil {
-		t.Errorf(err.Error())
+	actualResponse := &UserCheck{}
+
+	err = json.NewDecoder(w.Body).Decode(&actualResponse)
+	if(err != nil) {
+		t.Errorf("Error when decoding response from NewUser endpoint")
 	}
 
 	assert.Equal(t, http.StatusCreated, w.Code)
@@ -65,14 +60,17 @@ func TestNonValidNewUserEmailUsername(t *testing.T) {
 
 	expectedResponse := &UserCheck{
 		Empty: false,
+		Username: false,
+		Email: false,
 	}
-	var actualResponse = new(UserCheck)
-	decoder := json.NewDecoder(w.Body)
-	err = decoder.Decode(&actualResponse)
+
+	actualResponse := &UserCheck{}
+
+	err = json.NewDecoder(w.Body).Decode(&actualResponse)
 	if err != nil {
 		t.Errorf("Error when decoding response from NewUser endpoint")
 	}
 
-	assert.Equal(t, http.StatusConflict, w.Code)
+	assert.Equal(t, http.StatusBadRequest, w.Code)
 	assert.Equal(t, expectedResponse.Empty, actualResponse.Empty)
 }

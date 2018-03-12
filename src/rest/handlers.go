@@ -1,34 +1,38 @@
 package rest
 
 import (
-	"encoding/json"
 	"log"
 	"net/http"
 	"reflect"
 	"regexp"
 
 	"github.com/gin-gonic/gin"
+	"github.com/gin-gonic/gin/binding"
 )
 
 // NewUser - create a new user admin user
 func NewUser(c *gin.Context) {
-	newUser := new(User)
-	c.BindJSON(newUser)
+	newUser := &User{}
+	if err := c.BindWith(newUser, binding.JSON); err != nil {
+		c.JSON(http.StatusBadRequest, &UserCheck{
+			Empty: false,
+			Username: false,
+			Email: false,
+		})
+
+		return
+	}
 
 	status, userCheck := checkNewUserRequest(newUser)
 
-	json, err := json.Marshal(userCheck)
-	if err != nil {
-		log.Println(err.Error())
-	}
-
 	if status {
-		c.JSON(http.StatusCreated, json)
+		c.JSON(http.StatusCreated, &userCheck)
 		return
 	}
 
 	// Send back UserCheck - will be process client side.
-	c.JSON(http.StatusConflict, json)
+	c.JSON(http.StatusConflict, &userCheck)
+	return
 }
 
 // NewWarehouse - initalize new warehouse
