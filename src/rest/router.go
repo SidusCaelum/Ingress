@@ -11,6 +11,7 @@ var router *gin.Engine
 // NewRouter - create new router for server. Adds all routes
 func NewRouter(testing bool) *gin.Engine {
 	//HACK: add bool to check if testing
+	//need something better probably
 	router := gin.Default()
 	var templatePath string
 

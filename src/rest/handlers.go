@@ -1,6 +1,9 @@
 package rest
 
+//TODO: Change the http.status to ones that are more compliante
+
 import (
+	"log"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -21,7 +24,7 @@ func NewUser(c *gin.Context) {
 		return
 	}
 
-	userCheck, status := Check(newUser)
+	userCheck, status := Validate(newUser)
 
 	if _, ok := userCheck.(*UserCheck); ok {
 
@@ -51,15 +54,15 @@ func NewWarehouse(c *gin.Context) {
 
 	if err := c.ShouldBindWith(newWarehouse, binding.JSON); err != nil {
 		c.JSON(http.StatusBadRequest, &WarehouseCheck{
-			IsEmpty: true,
-			BadOwner: false,
+			IsEmpty:          true,
+			BadOwner:         false,
 			BadWarehouseName: false,
 		})
 
 		return
 	}
 
-	warehouseCheck, status := Check(newWarehouse)
+	warehouseCheck, status := Validate(newWarehouse)
 
 	if _, ok := warehouseCheck.(*WarehouseCheck); ok {
 		if status {
@@ -67,6 +70,7 @@ func NewWarehouse(c *gin.Context) {
 			return
 		}
 
+		log.Printf("error warehouse: %+v", warehouseCheck)
 		c.JSON(http.StatusConflict, &warehouseCheck)
 		return
 	}
