@@ -29,15 +29,15 @@ func TestValidNewUserEmailUsername(t *testing.T) {
 	w := performRequest(r, "POST", "/NewUser", jsonUser)
 
 	expectedResponse := &UserCheck{
-        IsEmpty: false,
-        BadUsername: false,
-        BadEmail: false,
-    }
+		IsEmpty:     false,
+		BadUsername: false,
+		BadEmail:    false,
+	}
 
 	actualResponse := &UserCheck{}
 
 	err = json.NewDecoder(w.Body).Decode(&actualResponse)
-	if(err != nil) {
+	if err != nil {
 		t.Errorf("Error when decoding response from NewUser endpoint")
 	}
 
@@ -60,9 +60,9 @@ func TestEmptyNewUserEmailUsername(t *testing.T) {
 	w := performRequest(r, "POST", "/NewUser", jsonUser)
 
 	expectedResponse := &UserCheck{
-		IsEmpty: true,
+		IsEmpty:     true,
 		BadUsername: true,
-		BadEmail: true,
+		BadEmail:    true,
 	}
 
 	actualResponse := &UserCheck{}
@@ -80,16 +80,16 @@ func TestBadNewUserEmailUsername(t *testing.T) {
 	r := NewRouter(true)
 	user := &User{Email: "test%^@testing.$go", Username: "*lkjjsdf*"}
 	jsonUser, err := json.Marshal(user)
-	if err != nil{
+	if err != nil {
 		t.Errorf("error with testuser struct: %s", err)
 	}
 
 	w := performRequest(r, "POST", "/NewUser", jsonUser)
 
 	expectedResponse := &UserCheck{
-		IsEmpty: false,
+		IsEmpty:     false,
 		BadUsername: true,
-		BadEmail: true,
+		BadEmail:    true,
 	}
 
 	actualResponse := &UserCheck{}
