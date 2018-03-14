@@ -76,4 +76,9 @@ func NewWarehouse(c *gin.Context) {
 	}
 	//TODO: Handle if warehouseCheck is not WarehouseCheck
 	//send response to the endpoint
+	c.JSON(http.StatusInternalServerError, &WarehouseCheck{
+		IsEmpty:          false,
+		BadOwner:         false,
+		BadWarehouseName: false,
+	})
 }
