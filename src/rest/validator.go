@@ -6,7 +6,7 @@ import (
 	"strings"
 )
 
-// Validator - testing
+// Validator - interface for all validator checks
 type Validator interface {
 	run() interface{}
 }

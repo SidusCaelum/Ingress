@@ -1,6 +1,7 @@
 package main
 
 import (
+	"Ingress/src/models"
 	"Ingress/src/rest"
 	"encoding/json"
 	"fmt"
@@ -20,15 +21,20 @@ func main() {
 	file, _ := os.Open("conf.json")
 	decoder := json.NewDecoder(file)
 	config := StartupConfiguration{}
-	err := decoder.Decode(&config)
-
-	if err != nil {
+	if err := decoder.Decode(&config); err != nil {
 		fmt.Println("error:", err)
 	}
+
+	db, err := models.InitDB("localhost")
+	if err != nil {
+		log.Printf("DB connection failed: %s", err)
+	}
+
+	defer db.Close()
 
 	fmt.Printf("Listenting on port: %d\n", config.Port)
 
 	//HACK: passing parameter to clarify if testing or not
-	r := rest.NewRouter(false)
+	r := rest.NewRouter(false, db)
 	r.Run()
 }

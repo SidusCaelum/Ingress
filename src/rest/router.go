@@ -1,15 +1,14 @@
 package rest
 
 import (
+	"Ingress/src/models"
 	"log"
 
 	"github.com/gin-gonic/gin"
 )
 
-var router *gin.Engine
-
 // NewRouter - create new router for server. Adds all routes
-func NewRouter(testing bool) *gin.Engine {
+func NewRouter(testing bool, db *models.Session) *gin.Engine {
 	//HACK: add bool to check if testing
 	//need something better probably
 	router := gin.Default()
@@ -25,9 +24,9 @@ func NewRouter(testing bool) *gin.Engine {
 	for _, route := range routes {
 		switch route.Method {
 		case "GET":
-			router.GET(route.Path, route.Handler)
+			router.GET(route.Path, route.Handler(db))
 		case "POST":
-			router.POST(route.Path, route.Handler)
+			router.POST(route.Path, route.Handler(db))
 		default:
 			log.Printf("%s - method not recognized", route.Path)
 		}
