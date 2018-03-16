@@ -1,10 +1,12 @@
 package rest
 
 import (
+	"Ingress/src/db"
 	"Ingress/src/models"
 	"Ingress/src/validator"
 	"bytes"
 	"encoding/json"
+	"log"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -22,7 +24,12 @@ func performRequest(r http.Handler, method, path string, jsonUser []byte) *httpt
 
 // TestValidNewUser - check if system handles correct submission
 func TestValidNewUser(t *testing.T) {
-	r := NewRouter(true)
+	db, err := db.InitDB("localhost")
+	if err != nil {
+		log.Fatalf("Database connection failed %s", err)
+	}
+
+	r := NewRouter(true, db)
 	user := &models.User{Email: "test@test.com", Username: "test"}
 	jsonUser, err := json.Marshal(user)
 	if err != nil {
@@ -52,7 +59,12 @@ func TestValidNewUser(t *testing.T) {
 
 // TestEmptyNewUser - check if system handles empty submission
 func TestEmptyNewUser(t *testing.T) {
-	r := NewRouter(true)
+	db, err := db.InitDB("localhost")
+	if err != nil {
+		log.Fatalf("Database connection failed %s", err)
+	}
+
+	r := NewRouter(true, db)
 	user := &models.User{Email: "", Username: ""}
 
 	jsonUser, err := json.Marshal(user)
@@ -80,7 +92,12 @@ func TestEmptyNewUser(t *testing.T) {
 
 // TestBadNewUser - check if system handles incorrect submission
 func TestBadNewUser(t *testing.T) {
-	r := NewRouter(true)
+	db, err := db.InitDB("localhost")
+	if err != nil {
+		log.Fatalf("Database connection failed %s", err)
+	}
+
+	r := NewRouter(true, db)
 	user := &models.User{
 		Email:    "test%^@testing.$go",
 		Username: "*lkjjsdf*",

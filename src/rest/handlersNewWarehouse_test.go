@@ -1,9 +1,11 @@
 package rest
 
 import (
+	"Ingress/src/db"
 	"Ingress/src/models"
 	"Ingress/src/validator"
 	"encoding/json"
+	"log"
 	"net/http"
 	"testing"
 
@@ -11,7 +13,14 @@ import (
 )
 
 func TestValidNewWarehouse(t *testing.T) {
-	r := NewRouter(true)
+	//NOTE: Do actually want to do this?
+	//Maybe come back to this and think about it more.
+	db, err := db.InitDB("localhost")
+	if err != nil {
+		log.Fatalf("Database connection failed %s", err)
+	}
+
+	r := NewRouter(true, db)
 	warehouse := &models.Warehouse{
 		Owner: "joshua",
 		Name:  "fun_new_Warehouse",
@@ -44,7 +53,12 @@ func TestValidNewWarehouse(t *testing.T) {
 
 //TestEmptyNewWarehouse - check if system handles empty submission
 func TestEmptyNewWarehouse(t *testing.T) {
-	r := NewRouter(true)
+	db, err := db.InitDB("localhost")
+	if err != nil {
+		log.Fatalf("Database connection failed %s", err)
+	}
+
+	r := NewRouter(true, db)
 	warehouse := &models.Warehouse{
 		Owner: "",
 		Name:  "",
@@ -75,7 +89,12 @@ func TestEmptyNewWarehouse(t *testing.T) {
 
 // TestBadNewWarehouse - check if system handles incorrect submission
 func TestBadNewWarehouse(t *testing.T) {
-	r := NewRouter(true)
+	db, err := db.InitDB("localhost")
+	if err != nil {
+		log.Fatalf("Database connection failed %s", err)
+	}
+
+	r := NewRouter(true, db)
 	warehouse := &models.Warehouse{
 		Owner: "092394fjj+_+(&&f)",
 		Name:  "32984_jsdfj*)(D)",

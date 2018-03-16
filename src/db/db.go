@@ -20,3 +20,9 @@ func InitDB(dataSourceName string) (*Session, error) {
 
 	return &Session{db}, nil
 }
+
+// ClearTable - Used to clear test data from the database
+func (db *Session) clearTable() {
+	db.DB("ingress").C("testusers").RemoveAll(nil)
+	db.DB("ingress").C("testwarehouses").RemoveAll(nil)
+}
