@@ -1,6 +1,7 @@
 package rest
 
 import (
+	"Ingress/src/models"
 	"encoding/json"
 	"net/http"
 	"testing"
@@ -10,7 +11,7 @@ import (
 
 func TestValidNewWarehouse(t *testing.T) {
 	r := NewRouter(true)
-	warehouse := &Warehouse{
+	warehouse := &models.Warehouse{
 		Owner: "joshua",
 		Name:  "fun_new_Warehouse",
 	}
@@ -43,7 +44,7 @@ func TestValidNewWarehouse(t *testing.T) {
 //TestEmptyNewWarehouse - check if system handles empty submission
 func TestEmptyNewWarehouse(t *testing.T) {
 	r := NewRouter(true)
-	warehouse := &Warehouse{
+	warehouse := &models.Warehouse{
 		Owner: "",
 		Name:  "",
 	}
@@ -74,7 +75,7 @@ func TestEmptyNewWarehouse(t *testing.T) {
 // TestBadNewWarehouse - check if system handles incorrect submission
 func TestBadNewWarehouse(t *testing.T) {
 	r := NewRouter(true)
-	warehouse := &Warehouse{
+	warehouse := &models.Warehouse{
 		Owner: "092394fjj+_+(&&f)",
 		Name:  "32984_jsdfj*)(D)",
 	}
@@ -86,7 +87,7 @@ func TestBadNewWarehouse(t *testing.T) {
 
 	w := performRequest(r, "POST", "/NewWarehouse", jsonWarehouse)
 
-	expectedResponse := &WarehouseCheck{
+	expectedResponse := &models.WarehouseCheck{
 		IsEmpty:          false,
 		BadOwner:         true,
 		BadWarehouseName: true,

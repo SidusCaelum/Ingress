@@ -3,7 +3,9 @@ package rest
 //TODO: Change the http.status to ones that are more compliante
 
 import (
+	"Ingress/src/db"
 	"Ingress/src/models"
+	"Ingress/src/validator"
 	"log"
 	"net/http"
 
@@ -12,7 +14,7 @@ import (
 )
 
 //Test - test handler
-func Test(db *models.Session) gin.HandlerFunc {
+func Test(db *db.Session) gin.HandlerFunc {
 	fn := func(c *gin.Context) {
 		if err := db.Ping(); err != nil {
 			log.Println(err)
@@ -20,7 +22,7 @@ func Test(db *models.Session) gin.HandlerFunc {
 
 		x := db.DB("ingress").C("test")
 		if err := x.Insert(
-			User{
+			models.User{
 				Email:    "test@test.com",
 				Username: "test",
 			},
@@ -35,14 +37,14 @@ func Test(db *models.Session) gin.HandlerFunc {
 }
 
 // NewUser - create a new user admin user
-func NewUser(db *models.Session) gin.HandlerFunc {
+func NewUser(db *db.Session) gin.HandlerFunc {
 	// NOTE: if this works should context be a single reference instead
 	// of creating a complete new one each time
 	fn := func(c *gin.Context) {
-		newUser := &User{}
+		newUser := &models.User{}
 
 		if err := c.ShouldBindWith(newUser, binding.JSON); err != nil {
-			c.JSON(http.StatusBadRequest, &UserCheck{
+			c.JSON(http.StatusBadRequest, &validator.UserCheck{
 				IsEmpty:     true,
 				BadUsername: false,
 				BadEmail:    false,
@@ -51,9 +53,9 @@ func NewUser(db *models.Session) gin.HandlerFunc {
 			return
 		}
 
-		userCheck, status := Validate(newUser)
+		userCheck, status := validator.Validate(newUser)
 
-		if _, ok := userCheck.(*UserCheck); ok {
+		if _, ok := userCheck.(*validator.UserCheck); ok {
 			if status {
 				c.JSON(http.StatusCreated, &userCheck)
 			}
@@ -63,7 +65,7 @@ func NewUser(db *models.Session) gin.HandlerFunc {
 		} else {
 			//TODO: Handle if userCheck is not UserCheck
 			//send response to the endpoint
-			c.JSON(http.StatusInternalServerError, &UserCheck{
+			c.JSON(http.StatusInternalServerError, &validator.UserCheck{
 				IsEmpty:     false,
 				BadUsername: false,
 				BadEmail:    false,
@@ -76,12 +78,12 @@ func NewUser(db *models.Session) gin.HandlerFunc {
 }
 
 // NewWarehouse - initalize new warehouse
-func NewWarehouse(db *models.Session) gin.HandlerFunc {
+func NewWarehouse(db *db.Session) gin.HandlerFunc {
 	fn := func(c *gin.Context) {
-		newWarehouse := &Warehouse{}
+		newWarehouse := &models.Warehouse{}
 
 		if err := c.ShouldBindWith(newWarehouse, binding.JSON); err != nil {
-			c.JSON(http.StatusBadRequest, &WarehouseCheck{
+			c.JSON(http.StatusBadRequest, &validator.WarehouseCheck{
 				IsEmpty:          true,
 				BadOwner:         false,
 				BadWarehouseName: false,
@@ -90,9 +92,9 @@ func NewWarehouse(db *models.Session) gin.HandlerFunc {
 			return
 		}
 
-		warehouseCheck, status := Validate(newWarehouse)
+		warehouseCheck, status := validator.Validate(newWarehouse)
 
-		if _, ok := warehouseCheck.(*WarehouseCheck); ok {
+		if _, ok := warehouseCheck.(*validator.WarehouseCheck); ok {
 			if status {
 				c.JSON(http.StatusCreated, &warehouseCheck)
 			}
@@ -102,7 +104,7 @@ func NewWarehouse(db *models.Session) gin.HandlerFunc {
 		} else {
 			//TODO: Handle if warehouseCheck is not WarehouseCheck
 			//send response to the endpoint
-			c.JSON(http.StatusInternalServerError, &WarehouseCheck{
+			c.JSON(http.StatusInternalServerError, &validator.WarehouseCheck{
 				IsEmpty:          false,
 				BadOwner:         false,
 				BadWarehouseName: false,

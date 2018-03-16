@@ -1,7 +1,7 @@
 package main
 
 import (
-	"Ingress/src/models"
+	DB "Ingress/src/db"
 	"Ingress/src/rest"
 	"encoding/json"
 	"fmt"
@@ -25,7 +25,7 @@ func main() {
 		fmt.Println("error:", err)
 	}
 
-	db, err := models.InitDB("localhost")
+	db, err := DB.InitDB("localhost")
 	if err != nil {
 		log.Printf("DB connection failed: %s", err)
 	}

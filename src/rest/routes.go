@@ -1,12 +1,12 @@
 package rest
 
 import (
-	"Ingress/src/models"
+	"Ingress/src/db"
 
 	"github.com/gin-gonic/gin"
 )
 
-type fn func(db *models.Session) gin.HandlerFunc
+type fn func(db *db.Session) gin.HandlerFunc
 
 //Route - struct for containing route information
 type Route struct {

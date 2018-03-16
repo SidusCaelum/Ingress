@@ -1,14 +1,14 @@
 package rest
 
 import (
-	"Ingress/src/models"
+	"Ingress/src/db"
 	"log"
 
 	"github.com/gin-gonic/gin"
 )
 
 // NewRouter - create new router for server. Adds all routes
-func NewRouter(testing bool, db *models.Session) *gin.Engine {
+func NewRouter(testing bool, db *db.Session) *gin.Engine {
 	//HACK: add bool to check if testing
 	//need something better probably
 	router := gin.Default()

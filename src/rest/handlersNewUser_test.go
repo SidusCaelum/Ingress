@@ -1,6 +1,7 @@
 package rest
 
 import (
+	"Ingress/src/models"
 	"bytes"
 	"encoding/json"
 	"net/http"
@@ -22,7 +23,7 @@ func performRequest(r http.Handler, method, path string, jsonUser []byte) *httpt
 func TestValidNewUser(t *testing.T) {
 	//TODO: change this as functionality added -> TestValidNewUser
 	r := NewRouter(true)
-	user := &User{Email: "test@test.com", Username: "test"}
+	user := &models.User{Email: "test@test.com", Username: "test"}
 	jsonUser, err := json.Marshal(user)
 	if err != nil {
 		t.Errorf("Error with TestUser struct: %s", err)
@@ -52,7 +53,7 @@ func TestValidNewUser(t *testing.T) {
 // TestEmptyNewUser - check if system handles empty submission
 func TestEmptyNewUser(t *testing.T) {
 	r := NewRouter(true)
-	user := &User{Email: "", Username: ""}
+	user := &models.User{Email: "", Username: ""}
 
 	jsonUser, err := json.Marshal(user)
 	if err != nil {
@@ -80,7 +81,7 @@ func TestEmptyNewUser(t *testing.T) {
 // TestBadNewUser - check if system handles incorrect submission
 func TestBadNewUser(t *testing.T) {
 	r := NewRouter(true)
-	user := &User{
+	user := &models.User{
 		Email:    "test%^@testing.$go",
 		Username: "*lkjjsdf*",
 	}
