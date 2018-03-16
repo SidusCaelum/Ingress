@@ -11,7 +11,9 @@ import (
 
 // StartupConfiguration - where config data is read into for startup
 type StartupConfiguration struct {
-	Port int
+	Port   int
+	DBIp   string
+	DBPort string
 }
 
 func main() {
@@ -25,7 +27,7 @@ func main() {
 		fmt.Println("error:", err)
 	}
 
-	db, err := DB.InitDB("localhost")
+	db, err := DB.InitDB(config.DBIp)
 	if err != nil {
 		log.Printf("DB connection failed: %s", err)
 	}

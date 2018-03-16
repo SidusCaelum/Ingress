@@ -2,6 +2,7 @@ package rest
 
 import (
 	"Ingress/src/models"
+	"Ingress/src/validator"
 	"bytes"
 	"encoding/json"
 	"net/http"
@@ -21,7 +22,6 @@ func performRequest(r http.Handler, method, path string, jsonUser []byte) *httpt
 
 // TestValidNewUser - check if system handles correct submission
 func TestValidNewUser(t *testing.T) {
-	//TODO: change this as functionality added -> TestValidNewUser
 	r := NewRouter(true)
 	user := &models.User{Email: "test@test.com", Username: "test"}
 	jsonUser, err := json.Marshal(user)
@@ -31,13 +31,13 @@ func TestValidNewUser(t *testing.T) {
 
 	w := performRequest(r, "POST", "/NewUser", jsonUser)
 
-	expectedResponse := &UserCheck{
+	expectedResponse := &validator.UserCheck{
 		IsEmpty:     false,
 		BadUsername: false,
 		BadEmail:    false,
 	}
 
-	actualResponse := &UserCheck{}
+	actualResponse := &validator.UserCheck{}
 
 	err = json.NewDecoder(w.Body).Decode(&actualResponse)
 	if err != nil {
@@ -62,13 +62,13 @@ func TestEmptyNewUser(t *testing.T) {
 
 	w := performRequest(r, "POST", "/NewUser", jsonUser)
 
-	expectedResponse := &UserCheck{
+	expectedResponse := &validator.UserCheck{
 		IsEmpty:     true,
 		BadUsername: true,
 		BadEmail:    true,
 	}
 
-	actualResponse := &UserCheck{}
+	actualResponse := &validator.UserCheck{}
 
 	if err = json.NewDecoder(w.Body).Decode(&actualResponse); err != nil {
 		t.Errorf("Error when decoding response from NewUser endpoint")
@@ -93,13 +93,13 @@ func TestBadNewUser(t *testing.T) {
 
 	w := performRequest(r, "POST", "/NewUser", jsonUser)
 
-	expectedResponse := &UserCheck{
+	expectedResponse := &validator.UserCheck{
 		IsEmpty:     false,
 		BadUsername: true,
 		BadEmail:    true,
 	}
 
-	actualResponse := &UserCheck{}
+	actualResponse := &validator.UserCheck{}
 
 	if err = json.NewDecoder(w.Body).Decode(&actualResponse); err != nil {
 		t.Errorf("error when decoding response from newuser endpoint")

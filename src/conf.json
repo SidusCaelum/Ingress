@@ -1,3 +1,5 @@
 {
-    "Port": 8080
+    "Port": 8080,
+    "DBIp": "localhost",
+    "DBPort": "27017"
 }

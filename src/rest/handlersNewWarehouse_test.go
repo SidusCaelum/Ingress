@@ -2,6 +2,7 @@ package rest
 
 import (
 	"Ingress/src/models"
+	"Ingress/src/validator"
 	"encoding/json"
 	"net/http"
 	"testing"
@@ -23,13 +24,13 @@ func TestValidNewWarehouse(t *testing.T) {
 
 	w := performRequest(r, "POST", "/NewWarehouse", jsonWarehouse)
 
-	expectedResponse := &WarehouseCheck{
+	expectedResponse := &validator.WarehouseCheck{
 		IsEmpty:          false,
 		BadOwner:         false,
 		BadWarehouseName: false,
 	}
 
-	actualResponse := &WarehouseCheck{}
+	actualResponse := &validator.WarehouseCheck{}
 
 	if err = json.NewDecoder(w.Body).Decode(&actualResponse); err != nil {
 		t.Errorf("error when decoding response from newwarehouse endpoint")
@@ -56,13 +57,13 @@ func TestEmptyNewWarehouse(t *testing.T) {
 
 	w := performRequest(r, "POST", "/NewWarehouse", jsonWarehouse)
 
-	expectedResponse := &WarehouseCheck{
+	expectedResponse := &validator.WarehouseCheck{
 		IsEmpty:          true,
 		BadOwner:         true,
 		BadWarehouseName: true,
 	}
 
-	actualResponse := &WarehouseCheck{}
+	actualResponse := &validator.WarehouseCheck{}
 
 	if err = json.NewDecoder(w.Body).Decode(&actualResponse); err != nil {
 		t.Errorf("Unable to marshal warehouse struct: %s", err)
@@ -87,13 +88,13 @@ func TestBadNewWarehouse(t *testing.T) {
 
 	w := performRequest(r, "POST", "/NewWarehouse", jsonWarehouse)
 
-	expectedResponse := &models.WarehouseCheck{
+	expectedResponse := &validator.WarehouseCheck{
 		IsEmpty:          false,
 		BadOwner:         true,
 		BadWarehouseName: true,
 	}
 
-	actualResponse := &WarehouseCheck{}
+	actualResponse := &validator.WarehouseCheck{}
 
 	if err = json.NewDecoder(w.Body).Decode(&actualResponse); err != nil {
 		t.Errorf("Error when decoding response from NewWarehouse endpoint")
