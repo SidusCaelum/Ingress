@@ -14,27 +14,27 @@ import (
 )
 
 //Test - test handler
-func Test(db *db.Session) gin.HandlerFunc {
-	fn := func(c *gin.Context) {
-		if err := db.Ping(); err != nil {
-			log.Println(err)
-		}
+// func Test(db *db.Session) gin.HandlerFunc {
+// 	fn := func(c *gin.Context) {
+// 		if err := db.Ping(); err != nil {
+// 			log.Println(err)
+// 		}
 
-		x := db.DB("ingress").C("test")
-		if err := x.Insert(
-			models.User{
-				Email:    "test@test.com",
-				Username: "test",
-			},
-		); err != nil {
-			log.Println("shit didn't work")
-		}
+// 		x := db.DB("ingress").C("test")
+// 		if err := x.Insert(
+// 			models.User{
+// 				Email:    "test@test.com",
+// 				Username: "test",
+// 			},
+// 		); err != nil {
+// 			log.Println("shit didn't work")
+// 		}
 
-		log.Println("if nothing came before this holy shit it worked")
-	}
+// 		log.Println("if nothing came before this holy shit it worked")
+// 	}
 
-	return gin.HandlerFunc(fn)
-}
+// 	return gin.HandlerFunc(fn)
+// }
 
 // NewUser - create a new user admin user
 func NewUser(db *db.Session) gin.HandlerFunc {
@@ -58,19 +58,22 @@ func NewUser(db *db.Session) gin.HandlerFunc {
 		if _, ok := userCheck.(*validator.UserCheck); ok {
 			if status {
 				c.JSON(http.StatusCreated, &userCheck)
+				newUser.AddUser(db)
+				return
 			}
 
 			// Send back UserCheck - will process client side.
 			c.JSON(http.StatusConflict, &userCheck)
-		} else {
-			//TODO: Handle if userCheck is not UserCheck
-			//send response to the endpoint
-			c.JSON(http.StatusInternalServerError, &validator.UserCheck{
-				IsEmpty:     false,
-				BadUsername: false,
-				BadEmail:    false,
-			})
+			return
 		}
+		//TODO: Handle if userCheck is not UserCheck
+		//send response to the endpoint
+		c.JSON(http.StatusInternalServerError, &validator.UserCheck{
+			IsEmpty:     false,
+			BadUsername: false,
+			BadEmail:    false,
+		})
+		return
 	}
 
 	return gin.HandlerFunc(fn)

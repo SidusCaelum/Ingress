@@ -1,7 +1,9 @@
 package models
 
 import (
+	"Ingress/src/db"
 	"Ingress/src/validator"
+	"log"
 	"regexp"
 	"strings"
 )
@@ -39,4 +41,15 @@ func (u *User) Run() interface{} {
 	}
 
 	return userCheck
+}
+
+//AddUser - add user to the database
+func (u *User) AddUser(db *db.Session) error {
+	x := db.DB("ingress").C("users")
+	err := x.Insert(u)
+	if err != nil {
+		log.Fatalf("Error inserting to db %s", err)
+	}
+
+	return err
 }

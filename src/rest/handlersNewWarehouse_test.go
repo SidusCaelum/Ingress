@@ -119,7 +119,7 @@ func TestBadNewWarehouse(t *testing.T) {
 		t.Errorf("Error when decoding response from NewWarehouse endpoint")
 	}
 
-	assert.Equal(t, http.StatusCreated, w.Code)
+	assert.Equal(t, http.StatusConflict, w.Code)
 	assert.Equal(t, expectedResponse.IsEmpty, actualResponse.IsEmpty)
 	assert.Equal(t, expectedResponse.BadOwner, actualResponse.BadOwner)
 	assert.Equal(t, expectedResponse.BadWarehouseName, actualResponse.BadWarehouseName)

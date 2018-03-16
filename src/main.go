@@ -1,6 +1,7 @@
 package main
 
 import (
+	"Ingress/src/app"
 	"Ingress/src/models"
 	"log"
 )
@@ -10,7 +11,7 @@ func main() {
 
 	config := new(models.StartupConfiguration)
 
-	a := new(App)
+	a := new(app.App)
 	a.Initialize(config)
 	a.Run()
 }
