@@ -1,15 +1,18 @@
 package models
 
 import (
+	"Ingress/src/db"
 	"Ingress/src/validator"
+	"log"
 	"regexp"
 	"strings"
 )
 
 // Warehouse - struct for warehouse data exchange between client and server
 type Warehouse struct {
-	Owner string `json:"Owner" binding:"required"`
-	Name  string `json:"Name" binding:"required"`
+	Owner  string      `json:"Owner" binding:"required"`
+	Name   string      `json:"Name" binding:"required"`
+	DBConn *db.Session `json:"-"`
 }
 
 func (w *Warehouse) checkIfEmptyRequest() bool {
@@ -41,4 +44,15 @@ func (w *Warehouse) Run() interface{} {
 	}
 
 	return warehouseCheck
+}
+
+//AddWarehouse - add warehouse to the database
+func (w *Warehouse) AddWarehouse() error {
+	if err := w.DBConn.DB("ingress").C("warehouses").Insert(w); err != nil {
+		//NOTE: probably shouldn't be fatal - or am i dumb and think this closes the program?
+		log.Fatalf("Error inserting to db %s", err)
+		return err
+	}
+
+	return nil
 }

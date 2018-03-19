@@ -10,8 +10,9 @@ import (
 
 // User - struct for user data exchange between client and server
 type User struct {
-	Email    string `json:"Email" binding:"required"`
-	Username string `json:"Username" binding:"required"`
+	Email    string      `json:"Email" binding:"required"`
+	Username string      `json:"Username" binding:"required"`
+	DBConn   *db.Session `json:"-"`
 }
 
 func (u *User) checkIfEmptyRequest() bool {
@@ -23,6 +24,7 @@ func (u *User) checkIfEmptyRequest() bool {
 }
 
 func (u *User) checkUsername() bool {
+	//NOTE: need to possibly rethink this regex to make it better?
 	r, _ := regexp.Compile(`^[a-z0-9_-]{3,16}$`)
 	return !(r.MatchString(u.Username))
 }
@@ -44,12 +46,12 @@ func (u *User) Run() interface{} {
 }
 
 //AddUser - add user to the database
-func (u *User) AddUser(db *db.Session) error {
-	x := db.DB("ingress").C("users")
-	err := x.Insert(u)
-	if err != nil {
+func (u *User) AddUser() error {
+	if err := u.DBConn.DB("ingress").C("users").Insert(u); err != nil {
+		//NOTE: probably shouldn't be fatal - or am i dumb and think this closes the program?
 		log.Fatalf("Error inserting to db %s", err)
+		return err
 	}
 
-	return err
+	return nil
 }

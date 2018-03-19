@@ -4,7 +4,6 @@ import (
 	"Ingress/src/db"
 	"Ingress/src/models"
 	"Ingress/src/rest"
-	"fmt"
 	"log"
 
 	"github.com/gin-gonic/gin"
@@ -22,7 +21,6 @@ type App struct {
 func (a *App) Initialize(config *models.StartupConfiguration) {
 	a.IP = config.DBIp
 	a.Port = config.Port
-	a.Router = rest.NewRouter(false, a.DB)
 }
 
 //Run - run app
@@ -34,8 +32,8 @@ func (a *App) Run() {
 		log.Fatalf("DB connection failed: %s", err)
 	}
 
-	defer a.DB.Close()
+	a.Router = rest.NewRouter(false, a.DB)
 
+	defer a.DB.Close()
 	a.Router.Run()
-	fmt.Printf("Listenting on port: %d\n", a.Port)
 }

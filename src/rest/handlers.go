@@ -1,6 +1,6 @@
 package rest
 
-//TODO: Change the http.status to ones that are more compliante
+//TODO: Change the http.status to ones that are more compliant
 
 import (
 	"Ingress/src/db"
@@ -39,9 +39,11 @@ import (
 // NewUser - create a new user admin user
 func NewUser(db *db.Session) gin.HandlerFunc {
 	// NOTE: if this works should context be a single reference instead
-	// of creating a complete new one each time
+	// of creating a complete new one for each handler
 	fn := func(c *gin.Context) {
-		newUser := &models.User{}
+		newUser := &models.User{
+			DBConn: db,
+		}
 
 		if err := c.ShouldBindWith(newUser, binding.JSON); err != nil {
 			c.JSON(http.StatusBadRequest, &validator.UserCheck{
@@ -58,7 +60,7 @@ func NewUser(db *db.Session) gin.HandlerFunc {
 		if _, ok := userCheck.(*validator.UserCheck); ok {
 			if status {
 				c.JSON(http.StatusCreated, &userCheck)
-				newUser.AddUser(db)
+				newUser.AddUser()
 				return
 			}
 

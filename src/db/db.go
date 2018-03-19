@@ -4,6 +4,11 @@ import "github.com/globalsign/mgo"
 
 // Session - struct containing connection to database
 type Session struct {
+	//TODO: Make this into a interface?
+	//based around the often used connection functions?
+	//Insert, Delete, etc to allow for tests to implement a generic
+	//on to the models - not sure if this will be good testing considering
+	//your only testing if the gin framework and not the database
 	*mgo.Session
 }
 
