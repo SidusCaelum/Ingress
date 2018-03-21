@@ -1,6 +1,7 @@
 package rest
 
 //TODO: Change the http.status to ones that are more compliant
+//TODO: ^Should build something out or find some middleware that handles this better
 
 import (
 	"Ingress/src/db"
@@ -57,10 +58,22 @@ func NewUser(db *db.Session) gin.HandlerFunc {
 
 		userCheck, status := validator.Validate(newUser)
 
+		//NOTE: this should be changed? Not enough information sent back
+		//to clarify the err - probably pass back the err? Or handle error interally
+		//to send back specific information
 		if _, ok := userCheck.(*validator.UserCheck); ok {
 			if status {
+				if isDup, err := newUser.AddUser(); err != nil {
+					if isDup {
+						c.JSON(http.StatusConflict, &userCheck)
+						return
+					}
+
+					c.JSON(http.StatusUnprocessableEntity, &userCheck)
+					return
+				}
+
 				c.JSON(http.StatusCreated, &userCheck)
-				newUser.AddUser()
 				return
 			}
 

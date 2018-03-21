@@ -6,6 +6,8 @@ import (
 	"log"
 	"regexp"
 	"strings"
+
+	"github.com/globalsign/mgo"
 )
 
 // User - struct for user data exchange between client and server
@@ -46,12 +48,41 @@ func (u *User) Run() interface{} {
 }
 
 //AddUser - add user to the database
-func (u *User) AddUser() error {
-	if err := u.DBConn.DB("ingress").C("users").Insert(u); err != nil {
-		//NOTE: probably shouldn't be fatal - or am i dumb and think this closes the program?
-		log.Fatalf("Error inserting to db %s", err)
-		return err
+func (u *User) AddUser() (bool, error) {
+	var err error
+
+	c := u.DBConn.DB("ingress").C("users")
+	index := mgo.Index{
+		Key:    []string{"email"},
+		Unique: true,
 	}
 
-	return nil
+	if err = c.EnsureIndex(index); err != nil {
+		//TODO: Come back here and handle this nicely
+		panic(err)
+	}
+
+	if err = c.Insert(u.marshalJSON()); err != nil {
+		if !mgo.IsDup(err) {
+			//NOTE: probably shouldn't be fatal - or am i dumb and think this closes the program?
+			log.Printf("Error inserting to db: %sn", err)
+			return false, err
+		}
+
+		return true, err
+	}
+
+	return false, nil
+}
+
+//HACK: Needs to be done better? mgo continues to serialize DBConn with json:"-"
+func (u *User) marshalJSON() (interface{}, error) {
+	var tmp struct {
+		Email    string `json:"Email" binding:"required"`
+		Username string `json:"Username" binding:"required"`
+	}
+
+	tmp.Email = u.Email
+	tmp.Username = u.Username
+	return tmp, nil
 }
