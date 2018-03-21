@@ -65,14 +65,17 @@ func NewUser(db *db.Session) gin.HandlerFunc {
 			if status {
 				if isDup, err := newUser.AddUser(); err != nil {
 					if isDup {
+						//Duplicate user
 						c.JSON(http.StatusConflict, &userCheck)
 						return
 					}
 
+					//Some other issue - probably should never reach here
 					c.JSON(http.StatusUnprocessableEntity, &userCheck)
 					return
 				}
 
+				//New user created with no issues
 				c.JSON(http.StatusCreated, &userCheck)
 				return
 			}

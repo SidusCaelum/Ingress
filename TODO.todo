@@ -2,11 +2,16 @@ INGRESS:
     File Structure:
         ✔ Fix your fucking file structure and GPATH idiot @done (2/15/2018, 10:55:07 PM)
     Router:
-        ☐ Build router setup
+        ✔ Build router setup @done (3/21/2018, 3:54:29 PM)
     Web API:
         Handlers:
-            ☐ Intial warehouse setup
+            ✔ Intial warehouse setup @done (3/21/2018, 3:54:43 PM)
+            ☐ Create admin user logic
             ☐ Connect to particular warehouse
+            ☐ Create QR maker
+            ☐ edit item(s)
+            ☐ delete item(s)
+    Mobile App:
             ☐ add new item with detials
             ☐ print label for item (qr code)
             ☐ edit item(s)
