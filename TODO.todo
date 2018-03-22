@@ -6,6 +6,8 @@ INGRESS:
     Web API:
         Handlers:
             ✔ Intial warehouse setup @done (3/21/2018, 3:54:43 PM)
+            ☐ Add Admin section to New Users
+                ☐ Add test for admin checking
             ☐ Create admin user logic
             ☐ Connect to particular warehouse
             ☐ Create QR maker

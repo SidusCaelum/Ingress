@@ -34,6 +34,7 @@ type UserCheck struct {
 	IsEmpty     bool `json:"IsEmpty"`
 	BadUsername bool `json:"BadUsername"`
 	BadEmail    bool `json:"BadEmail"`
+	IsAdmin     bool `json:"IsAdmin"`
 }
 
 // WarehouseCheck - struct for checking warehouse submission content

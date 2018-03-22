@@ -46,11 +46,14 @@ func NewUser(db *db.Session) gin.HandlerFunc {
 			DBConn: db,
 		}
 
+		//TODO: handle if you get a err from unmarshalling incorrect values 234 marshalled to bool
+		//This should be done client side, but double checked here
 		if err := c.ShouldBindWith(newUser, binding.JSON); err != nil {
 			c.JSON(http.StatusBadRequest, &validator.UserCheck{
 				IsEmpty:     true,
 				BadUsername: false,
 				BadEmail:    false,
+				IsAdmin:     false,
 			})
 
 			return
@@ -84,12 +87,14 @@ func NewUser(db *db.Session) gin.HandlerFunc {
 			c.JSON(http.StatusConflict, &userCheck)
 			return
 		}
+
 		//TODO: Handle if userCheck is not UserCheck
 		//send response to the endpoint
 		c.JSON(http.StatusInternalServerError, &validator.UserCheck{
 			IsEmpty:     false,
 			BadUsername: false,
 			BadEmail:    false,
+			IsAdmin:     false,
 		})
 		return
 	}

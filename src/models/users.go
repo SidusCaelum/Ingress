@@ -14,6 +14,7 @@ import (
 type User struct {
 	Email    string      `json:"Email" binding:"required"`
 	Username string      `json:"Username" binding:"required"`
+	Admin    bool        `json:"Admin" binding:"required"`
 	DBConn   *db.Session `json:"-"`
 }
 
@@ -34,6 +35,10 @@ func (u *User) checkUsername() bool {
 func (u *User) checkEmail() bool {
 	r, _ := regexp.Compile(`^(("[\w-\s]+")|([\w-]+(?:\.[\w-]+)*)|("[\w-\s]+")([\w-]+(?:\.[\w-]+)*))(@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$)|(@\[?((25[0-5]\.|2[0-4][0-9]\.|1[0-9]{2}\.|[0-9]{1,2}\.))((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\.){2}(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\]?$)`)
 	return !(r.MatchString(u.Email))
+}
+
+func (u *User) checkAdmin() bool {
+	return u.Admin
 }
 
 //Run - generic for returning checker on User model
@@ -80,9 +85,11 @@ func (u *User) marshalJSON() (interface{}, error) {
 	var tmp struct {
 		Email    string `json:"Email" binding:"required"`
 		Username string `json:"Username" binding:"required"`
+		Admin    bool   `json:"Admin" binding:"required"`
 	}
 
 	tmp.Email = u.Email
 	tmp.Username = u.Username
+	tmp.Admin = u.Admin
 	return tmp, nil
 }
