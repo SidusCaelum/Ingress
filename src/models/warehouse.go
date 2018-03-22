@@ -8,15 +8,20 @@ import (
 	"strings"
 )
 
+//Owner - struct for containing owership for the warehouse
+type Owner struct {
+	Email string `json:"Email" binding:"required"`
+}
+
 // Warehouse - struct for warehouse data exchange between client and server
 type Warehouse struct {
-	Owner  string      `json:"Owner" binding:"required"`
+	Owner  Owner       `json:"Owner" binding:"required"`
 	Name   string      `json:"Name" binding:"required"`
 	DBConn *db.Session `json:"-"`
 }
 
 func (w *Warehouse) checkIfEmptyRequest() bool {
-	if len(strings.TrimSpace(w.Owner)) == 0 || len(strings.TrimSpace(w.Name)) == 0 {
+	if len(strings.TrimSpace(w.Owner.Email)) == 0 || len(strings.TrimSpace(w.Name)) == 0 {
 		return true
 	}
 
@@ -25,8 +30,8 @@ func (w *Warehouse) checkIfEmptyRequest() bool {
 
 func (w *Warehouse) checkOwner() bool {
 	//TODO: this will different for checking the owner used right now for placeholder
-	r, _ := regexp.Compile(`^([a-zA-Z]+[,.]?[ ]?|[a-z]+['-]?)+$`)
-	return !(r.MatchString(w.Owner))
+	r, _ := regexp.Compile(`^(("[\w-\s]+")|([\w-]+(?:\.[\w-]+)*)|("[\w-\s]+")([\w-]+(?:\.[\w-]+)*))(@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$)|(@\[?((25[0-5]\.|2[0-4][0-9]\.|1[0-9]{2}\.|[0-9]{1,2}\.))((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\.){2}(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\]?$)`)
+	return !(r.MatchString(w.Owner.Email))
 }
 
 func (w *Warehouse) checkWarehouseName() bool {

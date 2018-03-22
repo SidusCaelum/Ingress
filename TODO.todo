@@ -6,13 +6,26 @@ INGRESS:
     Web API:
         Handlers:
             ✔ Intial warehouse setup @done (3/21/2018, 3:54:43 PM)
-            ☐ Add Admin section to New Users
-                ☐ Add test for admin checking
-            ☐ Create admin user logic
             ☐ Connect to particular warehouse
             ☐ Create QR maker
             ☐ edit item(s)
             ☐ delete item(s)
+        Logic:
+            Groups:
+                Logic for controlling warehouses to have multiple individuals to work on a warehouse
+                    ☐ Make groups for warehouse controlling 
+                        ☐ Create groups
+                        ☐ group controls 
+                        ☐ Admin - add users to group, remove, edit only certain "areas" in the warehouse
+            Admin:
+                ☐ Add Admin section to New Users
+                    ✔ Add logic to add admin property to NewUser @done (3/22/2018, 11:02:47 AM)
+                    ☐ Add test for admin checking
+                    ☐ Create admin user logic
+                    ☐ Logic for warehouse creation only for admins
+                    ☐ Connect user to warehouse
+            Warehouse:
+                ☐ Connect to warehouse with proper creds
     Mobile App:
             ☐ add new item with detials
             ☐ print label for item (qr code)
