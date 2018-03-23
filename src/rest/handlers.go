@@ -106,7 +106,9 @@ func NewUser(db *db.Session) gin.HandlerFunc {
 // NewWarehouse - initalize new warehouse
 func NewWarehouse(db *db.Session) gin.HandlerFunc {
 	fn := func(c *gin.Context) {
-		newWarehouse := &models.Warehouse{}
+		newWarehouse := &models.Warehouse{
+			DBConn: db,
+		}
 
 		if err := c.ShouldBindWith(newWarehouse, binding.JSON); err != nil {
 			c.JSON(http.StatusBadRequest, &validator.WarehouseCheck{
