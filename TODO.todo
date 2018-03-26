@@ -4,6 +4,9 @@ INGRESS:
     Router:
         ✔ Build router setup @done (3/21/2018, 3:54:29 PM)
     Web API:
+        Security: 
+            ☐ Add true authentication against database.
+                ☐ Use JWT's, Oauth2, etc?
         Handlers:
             ✔ Intial warehouse setup @done (3/21/2018, 3:54:43 PM)
             ☐ Connect to particular warehouse
