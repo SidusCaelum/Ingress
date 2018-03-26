@@ -29,9 +29,9 @@ var routes = Routes{
 		Path:    "/NewWarehouse",
 		Handler: NewWarehouse,
 	},
-	// Route{
-	// 	Method:  "POST",
-	// 	Path:    "/Test",
-	// 	Handler: Test,
-	// },
+	Route{
+		Method:  "POST",
+		Path:    "/NewItem",
+		Handler: NewItem,
+	},
 }

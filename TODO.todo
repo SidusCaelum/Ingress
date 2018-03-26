@@ -8,7 +8,6 @@ INGRESS:
             - https://github.com/square/go-jose - JWE, JWS, JWT
             - https://medium.com/@niceoneallround/jwts-in-go-golang-4e0151f899af
             - https://github.com/rs/xid - UUIDs
-            - https://github.com/skip2/go-qrcode - QR codes
     File Structure:
         ✔ Fix your fucking file structure and GPATH idiot @done (2/15/2018, 10:55:07 PM)
     Router:
@@ -33,12 +32,25 @@ INGRESS:
             Admin:
                 ☐ Add Admin section to New Users
                     ✔ Add logic to add admin property to NewUser @done (3/22/2018, 11:02:47 AM)
-                    ☐ Add test for admin checking
                     ☐ Create admin user logic
                     ☐ Logic for warehouse creation only for admins
                     ☐ Connect user to warehouse
             Warehouse:
                 ☐ Connect to warehouse with proper creds
+            Tests:
+                ☐ Add tests for important functionality 
+                    ☐ Add user
+                    ☐ Add warehouse
+                    ☐ Check creds for user on warehouse
+                    ☐ Create QR code
+                    ☐ Add QR code with item info to warehouse
+        Label:
+            Struct to string that can be read into a QR code
+                ☐ Pair down info needed for the QR code
+                ☐ Name, description, and identifier to lookup in database
+        Item:
+            ☐ Bulk entry for multiple items
+                ☐ CSV entry?
     Mobile App:
             ☐ add new item with detials
             ☐ print label for item (qr code)

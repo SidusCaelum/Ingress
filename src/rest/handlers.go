@@ -13,29 +13,6 @@ import (
 	"github.com/gin-gonic/gin/binding"
 )
 
-//Test - test handler
-// func Test(db *db.Session) gin.HandlerFunc {
-// 	fn := func(c *gin.Context) {
-// 		if err := db.Ping(); err != nil {
-// 			log.Println(err)
-// 		}
-
-// 		x := db.DB("ingress").C("test")
-// 		if err := x.Insert(
-// 			models.User{
-// 				Email:    "test@test.com",
-// 				Username: "test",
-// 			},
-// 		); err != nil {
-// 			log.Println("shit didn't work")
-// 		}
-
-// 		log.Println("if nothing came before this holy shit it worked")
-// 	}
-
-// 	return gin.HandlerFunc(fn)
-// }
-
 // NewUser - create a new user admin user
 func NewUser(db *db.Session) gin.HandlerFunc {
 	// NOTE: if this works should context be a single reference instead
@@ -161,6 +138,18 @@ func NewWarehouse(db *db.Session) gin.HandlerFunc {
 		})
 
 		return
+	}
+
+	return gin.HandlerFunc(fn)
+}
+
+//NewItem - add new item to warehouse with QR code
+func NewItem(db *db.Session) gin.HandlerFunc {
+	fn := func(c *gin.Context) {
+		newItem := &models.Item{
+			DBConn: db,
+		}
+
 	}
 
 	return gin.HandlerFunc(fn)
