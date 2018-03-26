@@ -7,7 +7,6 @@ import (
 	"Ingress/src/db"
 	"Ingress/src/models"
 	"Ingress/src/validator"
-	"log"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -96,6 +95,7 @@ func NewUser(db *db.Session) gin.HandlerFunc {
 			BadEmail:    false,
 			IsAdmin:     false,
 		})
+
 		return
 	}
 
@@ -105,11 +105,15 @@ func NewUser(db *db.Session) gin.HandlerFunc {
 
 // NewWarehouse - initalize new warehouse
 func NewWarehouse(db *db.Session) gin.HandlerFunc {
+	// NOTE: if this works should context be a single reference instead
+	// of creating a complete new one for each handler
 	fn := func(c *gin.Context) {
 		newWarehouse := &models.Warehouse{
 			DBConn: db,
 		}
 
+		//TODO: handle if you get a err from unmarshalling incorrect values 234 marshalled to bool
+		//This should be done client side, but double checked here
 		if err := c.ShouldBindWith(newWarehouse, binding.JSON); err != nil {
 			c.JSON(http.StatusBadRequest, &validator.WarehouseCheck{
 				IsEmpty:          true,
@@ -122,22 +126,41 @@ func NewWarehouse(db *db.Session) gin.HandlerFunc {
 
 		warehouseCheck, status := validator.Validate(newWarehouse)
 
+		//NOTE: this should be changed? Not enough information sent back
+		//to clarify the err - probably pass back the err? Or handle error interally
+		//to send back specific information
 		if _, ok := warehouseCheck.(*validator.WarehouseCheck); ok {
 			if status {
+				if err := newWarehouse.AddWarehouse(); err != nil {
+					/*if isDup {
+						//Duplicate warehouse
+						c.JSON(http.StatusConflict, &warehouseCheck)
+						return
+					}*/
+
+					//Some other issue - probably should never reach here
+					c.JSON(http.StatusUnprocessableEntity, &warehouseCheck)
+					return
+				}
+
+				//New warehouse created with no issues
 				c.JSON(http.StatusCreated, &warehouseCheck)
+				return
 			}
 
-			log.Printf("error warehouse: %+v", warehouseCheck)
 			c.JSON(http.StatusConflict, &warehouseCheck)
-		} else {
-			//TODO: Handle if warehouseCheck is not WarehouseCheck
-			//send response to the endpoint
-			c.JSON(http.StatusInternalServerError, &validator.WarehouseCheck{
-				IsEmpty:          false,
-				BadOwner:         false,
-				BadWarehouseName: false,
-			})
+			return
 		}
+
+		//TODO: Handle if warehouseCheck is not WarehouseCheck
+		//send response to the endpoint
+		c.JSON(http.StatusInternalServerError, &validator.WarehouseCheck{
+			IsEmpty:          false,
+			BadOwner:         false,
+			BadWarehouseName: false,
+		})
+
+		return
 	}
 
 	return gin.HandlerFunc(fn)

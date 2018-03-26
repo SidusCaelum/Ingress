@@ -64,11 +64,26 @@ func (w *Warehouse) Run() interface{} {
 
 //AddWarehouse - add warehouse to the database
 func (w *Warehouse) AddWarehouse() error {
-	if err := w.DBConn.DB("ingress").C(w.Name).Insert(w); err != nil {
+	var err error
+
+	c := w.DBConn.DB("ingress").C(w.Name)
+	if err = c.Insert(w.marshalJSON()); err != nil {
 		//NOTE: probably shouldn't be fatal - or am i dumb and think this closes the program?
-		log.Fatalf("Error inserting to db %s", err)
+		log.Printf("Error inserting to db %s", err)
 		return err
 	}
 
 	return nil
+}
+
+//HACK: needs to be done better? mgo continues to serialize DBConn with json:"-"
+func (w *Warehouse) marshalJSON() interface{} {
+	var tmp struct {
+		Owner Owner  `json:"Owner" binding:"required"`
+		Name  string `json:"Name" binding:"required"`
+	}
+
+	tmp.Owner = w.Owner
+	tmp.Name = w.Name
+	return tmp
 }

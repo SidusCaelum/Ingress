@@ -1,4 +1,14 @@
 INGRESS:
+    Minimum Value Product: 
+        ☐ Create a new user, create a warehouse, add items and print qr code for it, act upon the item
+        (edit, delete, transfer?? - not as important), recieve list of warehouses and item listed for it
+        ☐ A user interface will be developed secondly to present all these previously functionality
+    Packages:
+        Lists of packages to use eventually?
+            - https://github.com/square/go-jose - JWE, JWS, JWT
+            - https://medium.com/@niceoneallround/jwts-in-go-golang-4e0151f899af
+            - https://github.com/rs/xid - UUIDs
+            - https://github.com/skip2/go-qrcode - QR codes
     File Structure:
         ✔ Fix your fucking file structure and GPATH idiot @done (2/15/2018, 10:55:07 PM)
     Router:

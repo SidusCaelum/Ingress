@@ -77,6 +77,7 @@ func (u *User) AddUser() (bool, error) {
 		return true, err
 	}
 
+	//NOTE: this might not need to be here
 	return false, nil
 }
 
