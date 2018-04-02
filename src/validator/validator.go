@@ -43,3 +43,10 @@ type WarehouseCheck struct {
 	BadOwner         bool `json:"BadUsername"`
 	BadWarehouseName bool `json:"BadWarehouseName"`
 }
+
+// ItemCheck - struct for checking item submission content
+type ItemCheck struct {
+	IsEmpty      bool `json:"IsEmpty"`
+	BadWarehouse bool `json:"BadWarehouse"`
+	BadUUID      bool `json:"CheckUUID"`
+}

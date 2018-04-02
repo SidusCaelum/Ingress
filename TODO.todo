@@ -52,7 +52,9 @@ INGRESS:
             ☐ Bulk entry for multiple items
                 ☐ CSV entry?
     Mobile App:
-            ☐ add new item with detials
-            ☐ print label for item (qr code)
-            ☐ edit item(s)
-            ☐ delete item(s)
+        ☐ add new item with detials
+        ☐ print label for item (qr code)
+        ☐ edit item(s)
+        ☐ delete item(s)
+    DB:
+        MongoDB for development. Change to something else later on for better schema?

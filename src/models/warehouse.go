@@ -37,7 +37,7 @@ func (w *Warehouse) checkOwner() bool {
 
 	//NOTE: Checking if the the user exists and if they have admin rights
 	result := Result{}
-	c := w.DBConn.DB("ingress").C("users")
+	c := w.DBConn.DB(db.DB_NAME).C("users")
 	if err := c.Find(bson.M{"email": w.Owner.Email}).Select(bson.M{"admin": 1}).One(&result); err != nil {
 		return true
 	}
@@ -66,7 +66,7 @@ func (w *Warehouse) Run() interface{} {
 func (w *Warehouse) AddWarehouse() error {
 	var err error
 
-	c := w.DBConn.DB("ingress").C(w.Name)
+	c := w.DBConn.DB(db.DB_NAME).C(w.Name)
 	if err = c.Insert(w.marshalJSON()); err != nil {
 		//NOTE: probably shouldn't be fatal - or am i dumb and think this closes the program?
 		log.Printf("Error inserting to db %s", err)

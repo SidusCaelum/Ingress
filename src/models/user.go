@@ -56,7 +56,7 @@ func (u *User) Run() interface{} {
 func (u *User) AddUser() (bool, error) {
 	var err error
 
-	c := u.DBConn.DB("ingress").C("users")
+	c := u.DBConn.DB(db.DB_NAME).C("users")
 	index := mgo.Index{
 		Key:    []string{"email"},
 		Unique: true,
@@ -70,7 +70,7 @@ func (u *User) AddUser() (bool, error) {
 	if err = c.Insert(u.marshalJSON()); err != nil {
 		if !mgo.IsDup(err) {
 			//NOTE: probably shouldn't be fatal - or am i dumb and think this closes the program?
-			log.Printf("Error inserting to db: %sn", err)
+			log.Printf("Error inserting User to db: %s\n", err)
 			return false, err
 		}
 
@@ -84,13 +84,14 @@ func (u *User) AddUser() (bool, error) {
 //HACK: Needs to be done better? mgo continues to serialize DBConn with json:"-"
 func (u *User) marshalJSON() (interface{}, error) {
 	var tmp struct {
-		Email    string `json:"Email" binding:"required"`
-		Username string `json:"Username" binding:"required"`
-		Admin    bool   `json:"Admin" binding:"required"`
+		Email    string `json:"email" binding:"required"`
+		Username string `json:"username" binding:"required"`
+		Admin    bool   `json:"admin" binding:"required"`
 	}
 
 	tmp.Email = u.Email
 	tmp.Username = u.Username
 	tmp.Admin = u.Admin
+
 	return tmp, nil
 }

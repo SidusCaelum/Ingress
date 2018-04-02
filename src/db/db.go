@@ -12,6 +12,9 @@ type Session struct {
 	*mgo.Session
 }
 
+// DB_NAME - const for db connection to db
+const DB_NAME = "ingress"
+
 //InitDB - establish connection to the DB
 func InitDB(dataSourceName string) (*Session, error) {
 	db, err := mgo.Dial(dataSourceName)
