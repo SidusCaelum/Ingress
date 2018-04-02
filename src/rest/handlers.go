@@ -150,6 +150,9 @@ func NewItem(db *db.Session) gin.HandlerFunc {
 			DBConn: db,
 		}
 
+		if err := c.ShouldBindWith(newItem, binding.JSON); err != nil {
+			c.JSON(http.StatusBadRequest, &validator.)
+		}
 	}
 
 	return gin.HandlerFunc(fn)
